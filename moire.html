@@ -1,0 +1,287 @@
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+
+
+
+<input id="togbutton" type="button" value="CONTROL(i'm here)">
+<div id="controls">
+
+<input id="slider" name="slider" type="range" min="0" value="000" max="255" list="tickmarks">
+<input id="heightslider" name="heightslider" type="range" min="0" value="2" max="255" list="tickmarks">
+<input id="colorslider" name="colorslider" type="range" min="0" value="5" max="255" list="tickmarks">
+
+    
+<input id="zoomslider" name="zoomslider" type="range" min="-200" value="5" max="2000" list="tickmarks">
+   <input id="speedslider" name="speedslider" type="range" min="0" value="1" max="120">
+<input id="resetButton" name="reset" type="button" onclick="resetValues()" value="RESET">
+
+    <datalist id="tickmarks">
+<option value="-100"></option>
+    <option value="-50"></option>
+<option value="0"></option>
+    <option value="50"></option>
+<option value="100"></option>
+</datalist>
+
+</div>
+
+
+
+<div id="viewport"> 
+   
+    
+  <div id="one"> </div>
+  <div id="two"></div>
+    
+  <div id="three"><p>TEXT TEXT</p></div>
+   
+</div>
+
+
+
+
+<style>
+
+body {
+  margin    : 0;
+  padding   : 0;
+  width     : 100%;
+  height    : 100%;
+  position  : absolute;
+  top       : 0;
+  right     : 0;
+  bottom    : 0;
+  left      : 0;
+  overflow: hidden;
+    /*adjust postion of background with timeclock variable */
+    background: -webkit-repeating-radial-gradient(80% 25%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(10, 0, 0, 0.6) 2px, transparent 1px);
+     -webkit-animation: background-mover infinite linear var(--animation-time);
+    overflow: hidden;
+    
+}
+
+ 
+#viewport {
+  width     : 100%;
+  height    : 100%;
+  margin    : -150px 0 0 -150px;
+  /* border    : 1px solid #666; */
+  overflow  : hidden;
+}
+ 
+/* set the default transition time */
+:root {
+  --animation-time: 12s; 
+}    
+ 
+    
+#one {
+  width     : 200%;
+  height    : 200%;
+  margin    : 0 auto;
+  position  : absolute;
+  z-index   : -10;
+}
+    
+#two{
+        width : 200%;
+        height: 200%;
+        margin: 0 auto;
+        position: absolute;
+        z-index : -8;
+    }
+    
+    #three{
+        width: 200%;
+        height: 200%;
+        margin: 0 auto;
+        position: absolute;
+        z-index: -8;
+    
+        
+    }    
+ 
+@-webkit-keyframes anim {
+  0%    { left: 0; top: 0%; -webkit-transform: rotate(0deg); transform:  scale3d(1,1);}
+  100%  { left: 0; top: 0%;-webkit-transform: rotate(360deg); transform:  scale3d(1,1);}
+  
+}
+ 
+@-webkit-keyframes anim-two {
+  0%    { left: 0; top: -100%; }
+  50%   { left: -25%; top: -62%; 
+          transform: skew(10deg,10deg);}
+  100%  { left: 0; top: -25%; 
+          transform: skew(0deg,10deg);
+  }
+}
+    
+  
+    @-webkit-keyframes background-mover {
+        0% {left: 0; top:0;}
+        50% { left:1; top: 0;}
+        100{left:2; top:0;}
+    }
+ 
+#one {
+  background: -webkit-repeating-linear-gradient(0% 5%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(10, 0, 0, 0.6) 2px, transparent 3px);
+  -webkit-animation: anim linear infinite var(--animation-time);
+    animation-iteration-count:infinite;
+    overflow: hidden;
+}
+ 
+#two {
+ background: -webkit-repeating-linear-gradient(0% 5%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(10, 0, 0, 0.6) 2px, transparent 3px);
+  -webkit-animation: anim-two linear infinite var(--animation-delaytime);
+    animation-iteration-count:infinite;
+    overflow: hidden;
+}
+    
+    #three{
+        background-image: image('images/default.jpg');
+        background: -webkit-repeating-radial-gradient(50% 50%, circle, transparent, transparent 5px, rgba(0, 0, 0, 0.6) 5px, rgba(0, 0, 0, 0.6) 1px, transparent 10px);
+  -webkit-animation: anim-two infinite linear 15s alternate;
+    overflow: hidden;
+    }    
+
+
+    #controls{
+        display: inline-block;
+        border: 4px groove #000;
+        background-color: antiquewhite;
+        white-space: nowrap;
+        padding: 2px;
+        z-index: 200;
+    }    
+    
+</style>
+
+<script>
+    
+    
+    
+    $("#togbutton").click(function(){
+   $("#controls").toggle();
+                          });
+    
+   
+    function resetValues (){
+    $("#one").css("width",  '200%');
+    $("#one").css("height", '200%');
+    $("#one").css("background", " -webkit-repeating-radial-gradient(0% 225%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(0, 0, 0, 0.6) 2px, transparent 3px");
+    
+    }
+    
+    
+    var time = 30;
+console.log(time);
+    
+var oneMoire = document.querySelector('#one');
+oneMoire.style.setProperty('--animation-time', time +'s');    
+
+
+ 
+    
+//slider controls to change shit up
+document.addEventListener('DOMContentLoaded',function() {
+    document.querySelector('input[name="slider"]').onchange=changeEventHandler;
+},false);
+
+function changeEventHandler(event) {
+    // You can use “this” to refer to the selected element.
+    if(!event.target.value) alert('Please Select One');
+    else console.log('You like ' + event.target.value + ' times'); 
+}    
+
+    
+// editing image via css properties
+function editImage() {
+	var gs = $("#slider").val(); // grayscale
+	var blur = $("#heightslider").val(); // blur
+	var br = $("#zoomslider").val(); // brightness
+	var ct = $("#colorslider").val(); // contrast
+	var huer = $("#speedslider").val(); //hue-rotate
+	var opacity = $("#opacity").val(); //opacity
+	var invert = $("#invert").val(); //invert
+	var saturate = $("#saturate").val(); //saturate
+	var sepia = $("#sepia").val(); //sepia
+
+    var rValue = gs * -1;
+    var gValue = -blur;
+    var bValue = -ct;
+    
+    //var randomGradientSize = getRandomInt(100);
+    
+    
+	//$("#one").css("width",  + gs+ '%');
+    //$("#one").css("height", + blur + '%');
+    $("#one").css("background", " -webkit-repeating-radial-gradient("+ br +"% " + 50 + '%' + ", circle, transparent, transparent 1px, rgba("+ gs +"," + blur + ","+ ct +", 0.8) " + br + "px, rgba(0, 0, 0, 0.6) 2px, transparent 3px");
+    
+    $("body").css("background", " -webkit-repeating-radial-gradient("+ br +"% " + 5 + '%' + ", circle, transparent, transparent 1px, rgba("+ -gs +"," + --blur + ","+ -ct +", 0.8) " + br + "px, rgba(0, 0, 0, 0.6) 2px, transparent 3px");
+    //$("#one").css("background", "repeating-radial-gradient(red "+ gs +"%, yellow "+ blur +"%, green "+ br +"%)" )
+    
+    $("#two").css("background", " -webkit-repeating-radial-gradient("+ br +" 50%, rectangle, transparent, transparent 1px, rgba("+ rValue +"," + gValue + ","+ bValue +", 0.6) " + gValue + "px, rgba("+ rValue +", "+ gValue +","+ bValue +", 0.6) "+ gValue +"px, transparent " + bValue + "px");
+    
+    $("#three").css("background", "rgba"+ gs +","+ blur +"," + ct +",0.8)");
+    
+    
+    
+    var oneMoire = document.querySelector('#one');
+    oneMoire.style.setProperty('--animation-time', huer +'s');  
+    
+    //var delaytime = parseInt(huer) + 1;
+    //var twoMoire = document.querySelector('#two');
+    //twoMoire.style.setProperty('--animation-time', delaytime +'s');  
+    
+   // var oneMoireRotate = document.querySelector('#one');
+//    oneMoireRotate.style.setProperty('--rotateamount',huer);
+    
+    
+	$("#imageContainer img").css(
+    "-webkit-filter", 'grayscale(' + gs+
+    '%) blur(' + blur +
+    'px) brightness(' + br +
+    '%) contrast(' + ct +
+    '%) hue-rotate(' + huer +
+    'deg) opacity(' + opacity +
+    '%) invert(' + invert +
+    '%) saturate(' + saturate +
+    '%) sepia(' + sepia + '%)'
+  );
+}
+    
+    
+    
+    
+    
+    //When sliders change image will be updated via editImage() function
+$("input[type=range]").change(editImage).mousemove(editImage);
+    
+    
+    //time counter
+    
+    
+    
+    
+    
+    $(function() {
+ $('zoomslider').click(function() {
+
+   var container = $("one").parent()
+
+   $('one').height($(container).width());
+   $('one').width($(container).height());
+
+   $('one').css('position', 'absolute')
+   var px = $(container).width() / 2
+   var py = $(container).height() / 2
+   $('one').css('left', px-py).css('top', py-px);
+   //$("video").css({"transform":"rotate(90deg)"})
+ });
+});
+    
+    
+    
+</script>
