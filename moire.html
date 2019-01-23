@@ -1,21 +1,80 @@
-<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
 
+<!doctype html>
+<html lang="en">
+<head>		
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-98119275-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-98119275-1');
+</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Moire javascript video synthesizer. Version 0.69.">
+<title>THAT's MOIRE LIKE IT!</title>
+<link rel="stylesheet" href="css/moirestyle.css"/>
+    <link rel="icon" href="images/iconpunchingcactus.gif" type="image/gif">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
 
 
 <input id="togbutton" type="button" value="CONTROL(i'm here)">
 <div id="controls">
+<div class="controlItem">    
+<span class="controlLabel">Red</span>	
 
-<input id="slider" name="slider" type="range" min="0" value="000" max="255" list="tickmarks">
-<input id="heightslider" name="heightslider" type="range" min="0" value="2" max="255" list="tickmarks">
-<input id="colorslider" name="colorslider" type="range" min="0" value="5" max="255" list="tickmarks">
-
-    
+    <input id="redColorSlider" name="slider" type="range" min="0" value="000" max="255" list="tickmarks">
+    </div>
+    <div class="controlItem">    
+    <span class="controlLabel">Green</span> 
+<input id="greenColorSlider" name="slider" type="range" min="0" value="2" max="255" list="tickmarks">
+    </div>
+    <div class="controlItem">    
+    <span class="controlLabel">Blue</span> 
+<input id="blueColorSlider" name="slider" type="range" min="0" value="5" max="255" list="tickmarks">
+    </div>
+<div class="controlItem">    
+<span class="controlLabel">Zoom</span>
 <input id="zoomslider" name="zoomslider" type="range" min="-200" value="5" max="2000" list="tickmarks">
-   <input id="speedslider" name="speedslider" type="range" min="0" value="1" max="120">
+    </div>
+    
+    <div class="controlItem">    
+<span class="controlLabel">Speed</span>    
+   <input id="speedslider" name="speedslider" type="range" min="0" value="12" max="120" list="speedmarks">
+    </div>
+    
+    <div class="controlItem">
+    <span class="controlLabel">OtherParam</span>
+        <input id="farslider" name="farslider" type="range" min="0" value="0" max="1000" list="tickmarks">
+    </div>
+    
+    <div class="controlItem">
+    <span class="controlLabel">Rotation</span>
+        <input id="rotaterSlider" name="rotaterSlider" type="range" min="0"
+               value="0" max="360">
+    </div>
+    
+    <div class="controlItem">
+    <span class="controlLabel">Random Color Strobe</span>
+        <input id="timeClicker" name="timeClicker" type="checkbox" >
+    
+        <input id="timeVal" name="timeVal" type="number" value="500">
+    </div>
+	
+	<div class="controlItem">
+	<span class="controlLabel">Timespace Modulator</span>
+		<input id="timeSpaceModClicker" name="timeSpaceModClicker" type="checkbox" >
+	</div>
+    
+    
+    
+    <div class="controlItem">
 <input id="resetButton" name="reset" type="button" onclick="resetValues()" value="RESET">
+        </div>
 
     <datalist id="tickmarks">
 <option value="-100"></option>
@@ -24,264 +83,212 @@
     <option value="50"></option>
 <option value="100"></option>
 </datalist>
+	
+	<datalist id="speedmarks">
+		<option value= "0"></option>
+		<option value="120"></option>
+	</datalist>
 
 </div>
 
-
-
-<div id="viewport"> 
-   
-    
+	<input type="button" id="helpButton" value="What in tarnation?">
+	
+		<div id="helpPanel">
+		<p>This is a <a href="https://en.wikipedia.org/wiki/Moir%C3%A9_pattern" target="_blank">moire</a> relaxation visualization engine. It's a <a href="https://en.wikipedia.org/wiki/Video_synthesizer" target="_blank">video synthesizer</a> created in javascript and CSS to create some relaxing moire-esque patterns to relax your mind and exercise your eyeballs in these tumultuous times.    
+			
+			</p>
+	
+		</div>
+	
+<div id="viewport">
   <div id="one"> </div>
   <div id="two"></div>
-    
-  <div id="three"><p>TEXT TEXT</p></div>
-   
 </div>
+<script>
+resetValues();    
+$("#controls").toggle(false);
+$("#helpPanel").toggle(false);	
+    
+$("#togbutton").click(function(){
+$("#controls").toggle("slow");
+                      });
+
+	
+$("#helpButton").click(function(){
+$("#helpPanel").toggle("slow");
+});	
+	
+var timerVar;    
+$("#timeClicker").click(function () {
+if ($(this).is(":checked")){
+
+	        var timerVal = $('#timeVal').val();
+    $('#timeVal').change(function(){
+                                      
+    var timerVal = $('#timeVal').val();
+	timerCheck();	
+		return timerVal;
+    });
+    
+	
+	
+console.log("checked");
+ timerVar = window.setInterval(timerVariable, timerVal);
+	    console.log("strobe time",timerVal);
 
 
+}else {
+	console.log("not checked");
+	timerStop(timerVar);
+timerVar = null;
 
+}
+});
+	
+var timeSpaceModVar;	
+$("#timeSpaceModClicker").click(function (){
+if ($(this).is(":checked")){
+	var timerVal = $('#timeVal').val();
+    $('#timeVal').change(function(){
+                                      
+    var timerVal = $('#timeVal').val();
+	timerCheck();	
+		return timerVal;
+    });
+    
+	
+  timeSpaceModVar = window.setInterval(timeSpaceModulator, timerVal);
 
-<style>
+}else{
+timerStop(timeSpaceModVar);
+timeSpaceModVar = null;
+}
+});	
+	
+	
+	function timerStop(programToStop){
+	window.clearInterval(programToStop);
+}
+      
+            
 
-body {
-  margin    : 0;
-  padding   : 0;
-  width     : 100%;
-  height    : 100%;
-  position  : absolute;
-  top       : 0;
-  right     : 0;
-  bottom    : 0;
-  left      : 0;
-  overflow: hidden;
-    /*adjust postion of background with timeclock variable */
-    background: -webkit-repeating-radial-gradient(80% 25%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(10, 0, 0, 0.6) 2px, transparent 1px);
-     -webkit-animation: background-mover infinite linear var(--animation-time);
-    overflow: hidden;
+function timerCheck(){
+
+    var isChecked = $("#timeClicker").val();
     
 }
+	
 
- 
-#viewport {
-  width     : 100%;
-  height    : 100%;
-  margin    : -150px 0 0 -150px;
-  /* border    : 1px solid #666; */
-  overflow  : hidden;
-}
- 
-/* set the default transition time */
-:root {
-  --animation-time: 12s; 
-}    
- 
     
-#one {
-  width     : 200%;
-  height    : 200%;
-  margin    : 0 auto;
-  position  : absolute;
-  z-index   : -10;
-}
-    
-#two{
-        width : 200%;
-        height: 200%;
-        margin: 0 auto;
-        position: absolute;
-        z-index : -8;
-    }
-    
-    #three{
-        width: 200%;
-        height: 200%;
-        margin: 0 auto;
-        position: absolute;
-        z-index: -8;
+//this is not working the way i want it to just yet
+//    
+//    var timerVal;
+//    $('#timeVal').change(function(){
+//                                      
+//    var timerVal = $('#timeVal').val();
+//	timerCheck();	
+//    console.log(timerVal);
+//		return timerVal;
+//    });
+//    
     
         
-    }    
- 
-@-webkit-keyframes anim {
-  0%    { left: 0; top: 0%; -webkit-transform: rotate(0deg); transform:  scale3d(1,1);}
-  100%  { left: 0; top: 0%;-webkit-transform: rotate(360deg); transform:  scale3d(1,1);}
-  
-}
- 
-@-webkit-keyframes anim-two {
-  0%    { left: 0; top: -100%; }
-  50%   { left: -25%; top: -62%; 
-          transform: skew(10deg,10deg);}
-  100%  { left: 0; top: -25%; 
-          transform: skew(0deg,10deg);
-  }
-}
-    
-  
-    @-webkit-keyframes background-mover {
-        0% {left: 0; top:0;}
-        50% { left:1; top: 0;}
-        100{left:2; top:0;}
+        function timerVariable(){
+    var ms = new Date().getMilliseconds();
+    $("body").css("background-color","rgba("+getRandomInt(ms)+","+getRandomInt(ms)+","+getRandomInt(ms)+")");    
+        
     }
- 
-#one {
-  background: -webkit-repeating-linear-gradient(0% 5%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(10, 0, 0, 0.6) 2px, transparent 3px);
-  -webkit-animation: anim linear infinite var(--animation-time);
-    animation-iteration-count:infinite;
-    overflow: hidden;
-}
- 
-#two {
- background: -webkit-repeating-linear-gradient(0% 5%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(10, 0, 0, 0.6) 2px, transparent 3px);
-  -webkit-animation: anim-two linear infinite var(--animation-delaytime);
-    animation-iteration-count:infinite;
-    overflow: hidden;
-}
-    
-    #three{
-        background-image: image('images/default.jpg');
-        background: -webkit-repeating-radial-gradient(50% 50%, circle, transparent, transparent 5px, rgba(0, 0, 0, 0.6) 5px, rgba(0, 0, 0, 0.6) 1px, transparent 10px);
-  -webkit-animation: anim-two infinite linear 15s alternate;
-    overflow: hidden;
-    }    
+	
+	function timeSpaceModulator(){
+	console.log("timespace");
+		var timeVal = new Date();
+		var secondsVal = timeVal.getSeconds();
+		var millisecondsVal = timeVal.getMilliseconds();
+	//$("#one").css("transform","matrix("+getRandomInt(millisecondsVal)/1000+","+getRandomInt(secondsVal)/100+",-0.8,0.866,0,0)");
+		$("#one").css("transform","scale("+getRandomInt(millisecondsVal)/100+","+getRandomInt(secondsVal)/100+")");
 
-
-    #controls{
-        display: inline-block;
-        border: 4px groove #000;
-        background-color: antiquewhite;
-        white-space: nowrap;
-        padding: 2px;
-        z-index: 200;
-    }    
-    
-</style>
-
-<script>
-    
-    
-    
-    $("#togbutton").click(function(){
-   $("#controls").toggle();
-                          });
-    
+	}
    
-    function resetValues (){
-    $("#one").css("width",  '200%');
-    $("#one").css("height", '200%');
-    $("#one").css("background", " -webkit-repeating-radial-gradient(0% 225%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(0, 0, 0, 0.6) 2px, transparent 3px");
     
-    }
-    
-    
-    var time = 30;
-console.log(time);
-    
-var oneMoire = document.querySelector('#one');
-oneMoire.style.setProperty('--animation-time', time +'s');    
+function resetValues (){
+$("#one").css("width",  '200%');
+$("#one").css("height", '200%');
+$("#one").css("background", " -webkit-repeating-radial-gradient(0% 225%, circle, transparent, transparent 1px, rgba(0, 0, 0, 0.6) 1px, rgba(0, 0, 0, 0.6) 2px, transparent 3px");
+
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
 
- 
-    
-//slider controls to change shit up
+
+//slider controls to change css values
 document.addEventListener('DOMContentLoaded',function() {
-    document.querySelector('input[name="slider"]').onchange=changeEventHandler;
+document.querySelector('input[name="slider"]').onchange=changeEventHandler;
 },false);
 
 function changeEventHandler(event) {
-    // You can use “this” to refer to the selected element.
-    if(!event.target.value) alert('Please Select One');
-    else console.log('You like ' + event.target.value + ' times'); 
-}    
+// You can use this to refer to the selected element.
+if(!event.target.value) alert('Please Select One');
 
-    
+}
+
+
 // editing image via css properties
 function editImage() {
-	var gs = $("#slider").val(); // grayscale
-	var blur = $("#heightslider").val(); // blur
-	var br = $("#zoomslider").val(); // brightness
-	var ct = $("#colorslider").val(); // contrast
-	var huer = $("#speedslider").val(); //hue-rotate
-	var opacity = $("#opacity").val(); //opacity
-	var invert = $("#invert").val(); //invert
-	var saturate = $("#saturate").val(); //saturate
-	var sepia = $("#sepia").val(); //sepia
+var redSliderVal = $("#redColorSlider").val(); 
+var greenSliderVal = $("#greenColorSlider").val();
+var zoomSliderVal = $("#zoomslider").val();
+var blueSliderVal = $("#blueColorSlider").val(); 
+var speedSliderVal = $("#speedslider").val(); 
+var farsliderVal = $("#farslider").val(); 
+var rotateVal = $("#rotaterSlider").val(); 
+var saturate = $("#saturate").val(); //saturate
+var sepia = $("#sepia").val(); //sepia
 
-    var rValue = gs * -1;
-    var gValue = -blur;
-    var bValue = -ct;
-    
-    //var randomGradientSize = getRandomInt(100);
-    
-    
-	//$("#one").css("width",  + gs+ '%');
-    //$("#one").css("height", + blur + '%');
-    $("#one").css("background", " -webkit-repeating-radial-gradient("+ br +"% " + 50 + '%' + ", circle, transparent, transparent 1px, rgba("+ gs +"," + blur + ","+ ct +", 0.8) " + br + "px, rgba(0, 0, 0, 0.6) 2px, transparent 3px");
-    
-    $("body").css("background", " -webkit-repeating-radial-gradient("+ br +"% " + 5 + '%' + ", circle, transparent, transparent 1px, rgba("+ -gs +"," + --blur + ","+ -ct +", 0.8) " + br + "px, rgba(0, 0, 0, 0.6) 2px, transparent 3px");
-    //$("#one").css("background", "repeating-radial-gradient(red "+ gs +"%, yellow "+ blur +"%, green "+ br +"%)" )
-    
-    $("#two").css("background", " -webkit-repeating-radial-gradient("+ br +" 50%, rectangle, transparent, transparent 1px, rgba("+ rValue +"," + gValue + ","+ bValue +", 0.6) " + gValue + "px, rgba("+ rValue +", "+ gValue +","+ bValue +", 0.6) "+ gValue +"px, transparent " + bValue + "px");
-    
-    $("#three").css("background", "rgba"+ gs +","+ blur +"," + ct +",0.8)");
+var rValue = convertRange(redSliderVal,[0,255],[255,0]);
+var gValue = convertRange(greenSliderVal,[0,255],[255,0]);
+var bValue = convertRange(blueSliderVal,[0,255],[255,0]);
+
+var altZoomVal = convertRange(zoomSliderVal, [-200, 2000],[2000,-200]);
     
     
+var randomGradientSize = getRandomInt(100);
+
+   
     
-    var oneMoire = document.querySelector('#one');
-    oneMoire.style.setProperty('--animation-time', huer +'s');  
-    
-    //var delaytime = parseInt(huer) + 1;
-    //var twoMoire = document.querySelector('#two');
-    //twoMoire.style.setProperty('--animation-time', delaytime +'s');  
-    
-   // var oneMoireRotate = document.querySelector('#one');
-//    oneMoireRotate.style.setProperty('--rotateamount',huer);
+$("#one").css("background", " -webkit-repeating-radial-gradient("+ zoomSliderVal +"% " + zoomSliderVal + '%' + ", circle,    transparent, transparent 1px, rgba("+ redSliderVal +"," + greenSliderVal + ","+ blueSliderVal +", 0.8) " + zoomSliderVal + "px, rgba("+redSliderVal+", 0, 0, 0.6) 2px, transparent 3px");
+
+$("#one").css("transform","skew("+ farsliderVal +"deg,"+rotateVal+"deg)");
     
     
-	$("#imageContainer img").css(
-    "-webkit-filter", 'grayscale(' + gs+
-    '%) blur(' + blur +
-    'px) brightness(' + br +
-    '%) contrast(' + ct +
-    '%) hue-rotate(' + huer +
-    'deg) opacity(' + opacity +
-    '%) invert(' + invert +
-    '%) saturate(' + saturate +
-    '%) sepia(' + sepia + '%)'
-  );
+$("body").css("background", " -webkit-repeating-radial-gradient("+ altZoomVal +"% " + 5 + '%' + ", circle, transparent, transparent 1px, rgba("+ redSliderVal +"," + greenSliderVal + ","+ blueSliderVal +", 0.8) " + getRandomInt(zoomSliderVal) + "px, rgba(0, 0, 0, 0.6) 2px, transparent 3px");
+    
+$("body").css("background-color", "rgba("+rValue+","+gValue+","+bValue+")");    
+
+$("#two").css("background-image", " -webkit-repeating-linear-gradient(50% 50%, transparent, transparent 1px, rgba("+ rValue +"," + gValue + ","+ bValue +", 0.6) 6px, rgba("+ redSliderVal +", "+ greenSliderVal +","+ blueSliderVal +", 0.6) 3px, transparent 4px");
+
+
+var oneMoire = document.querySelector('#one');
+oneMoire.style.setProperty('--animation-time', speedSliderVal +'s');
+
+
+
 }
-    
-    
-    
-    
-    
-    //When sliders change image will be updated via editImage() function
+
+
+function convertRange( value, r1, r2 ) { 
+    return ( value - r1[ 0 ] ) * ( r2[ 1 ] - r2[ 0 ] ) / ( r1[ 1 ] - r1[ 0 ] ) + r2[ 0 ];
+}
+
+
+
+//When sliders change image will be updated via editImage() function
 $("input[type=range]").change(editImage).mousemove(editImage);
-    
-    
-    //time counter
-    
-    
-    
-    
-    
-    $(function() {
- $('zoomslider').click(function() {
 
-   var container = $("one").parent()
 
-   $('one').height($(container).width());
-   $('one').width($(container).height());
 
-   $('one').css('position', 'absolute')
-   var px = $(container).width() / 2
-   var py = $(container).height() / 2
-   $('one').css('left', px-py).css('top', py-px);
-   //$("video").css({"transform":"rotate(90deg)"})
- });
-});
-    
-    
-    
 </script>
+</body>
+</html>
